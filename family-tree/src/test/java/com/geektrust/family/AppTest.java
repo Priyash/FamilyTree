@@ -64,7 +64,7 @@ public class AppTest {
     @Test
     public void test_for_finding_sister_in_law_returns_empty_list()
     {
-        Fetchable sisterInLawfetcher = (FetchSisterInLaw) Graph.getInstance()
+        Fetchable sisterInLawfetcher = (Fetchable) Graph.getInstance()
         .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_SISTER_IN_LAW]);
         IFamilyMember person3 = Graph.getInstance().createNewFamilyMember("Vyan");
         LinkedList<IFamilyMember> sisterInLaws = sisterInLawfetcher.fetchPersonInRelation(person3, familyTree);
@@ -74,7 +74,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_sister_in_law_returns_non_empty_list() {
-        Fetchable sisterInLawfetcher = (FetchSisterInLaw) Graph.getInstance()
+        Fetchable sisterInLawfetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_SISTER_IN_LAW]);
         IFamilyMember person3 = Graph.getInstance().createNewFamilyMember("Ish");
         LinkedList<IFamilyMember> sisterInLaws = sisterInLawfetcher.fetchPersonInRelation(person3, familyTree);
@@ -88,7 +88,7 @@ public class AppTest {
     @Test
     public void test_for_finding_sons_returns_non_empty_list()
     {
-        Fetchable fetcher = (FetchSons)
+        Fetchable fetcher = (Fetchable)
         Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_SON]);
         IFamilyMember person1 = Graph.getInstance().createNewFamilyMember("Satya");
         LinkedList<IFamilyMember> sons = fetcher.fetchPersonInRelation(person1,
@@ -101,7 +101,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_daughters_returns_non_empty_list() {
-        Fetchable dughterfetcher = (FetchDaughters)
+        Fetchable dughterfetcher = (Fetchable)
         Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_DAUGHTER]);
         IFamilyMember person2 = Graph.getInstance().createNewFamilyMember("Lika");
         LinkedList<IFamilyMember> daughters =
@@ -113,7 +113,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_daughters_returns_empty_list() {
-        Fetchable dughterfetcher = (FetchDaughters) Graph.getInstance()
+        Fetchable dughterfetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_DAUGHTER]);
         IFamilyMember person2 = Graph.getInstance().createNewFamilyMember("Krithi");
         LinkedList<IFamilyMember> daughters = dughterfetcher.fetchPersonInRelation(person2, familyTree);
@@ -124,7 +124,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_siblings_return_non_empty_list() {
-        Fetchable siblingsFetcher = (FetchSiblings) Graph.getInstance()
+        Fetchable siblingsFetcher = (Fetchable) Graph.getInstance()
         .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_SIBLINGS]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Asva");
         LinkedList<IFamilyMember> siblings = siblingsFetcher.fetchPersonInRelation(person, familyTree);
@@ -135,7 +135,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_maternal_aunt_return_non_empty_list() {
-        Fetchable maternalAuntFetcher = (FetchMaternalAunt) Graph.getInstance()
+        Fetchable maternalAuntFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_AUNT]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Yodhan");
         LinkedList<IFamilyMember> maternalAuntList = maternalAuntFetcher.fetchPersonInRelation(person, familyTree);
@@ -144,7 +144,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_maternal_aunt_return_empty_list() {
-        Fetchable maternalAuntFetcher = (FetchMaternalAunt) Graph.getInstance()
+        Fetchable maternalAuntFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_AUNT]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Vasa");
         
@@ -157,7 +157,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_maternal_uncle_return_non_empty_list() {
-        Fetchable maternalUncleFetcher = (FetchMaternalUncle) Graph.getInstance()
+        Fetchable maternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Yodhan");
 
@@ -170,7 +170,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_maternal_uncle_return_non_empty_list_2() {
-        Fetchable maternalUncleFetcher = (FetchMaternalUncle) Graph.getInstance()
+        Fetchable maternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Lavnya");
 
@@ -184,7 +184,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_maternal_uncle_return_empty_list() {
-        Fetchable maternalUncleFetcher = (FetchMaternalUncle) Graph.getInstance()
+        Fetchable maternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Vasa");
 
@@ -196,7 +196,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_maternal_uncle_return_non_empty_list_3() {
-        Fetchable maternalUncleFetcher = (FetchMaternalUncle) Graph.getInstance()
+        Fetchable maternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Asva");
 
@@ -215,7 +215,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_paternal_uncle_return_non_empty_list() {
-        Fetchable paternalUncleFetcher = (FetchPaternalUncle) Graph.getInstance()
+        Fetchable paternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_PATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Vasa");
 
@@ -228,7 +228,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_paternal_uncle_return_non_empty_list_2() {
-        Fetchable paternalUncleFetcher = (FetchPaternalUncle) Graph.getInstance()
+        Fetchable paternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_PATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Kriya");
 
@@ -242,7 +242,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_paternal_uncle_return_non_empty_list_3() {
-        Fetchable paternalUncleFetcher = (FetchPaternalUncle) Graph.getInstance()
+        Fetchable paternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_PATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Vila");
 
@@ -259,7 +259,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_paternal_uncle_return_non_empty_list_4() {
-        Fetchable paternalUncleFetcher = (FetchPaternalUncle) Graph.getInstance()
+        Fetchable paternalUncleFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_PATERNAL_UNCLE]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Jnki");
 
@@ -277,7 +277,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_paternal_aunt_return_non_empty_list() {
-        Fetchable paternalAuntFetcher = (FetchPaternalAunt) Graph.getInstance()
+        Fetchable paternalAuntFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_PATERNAL_AUNT]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Jnki");
 
@@ -290,7 +290,7 @@ public class AppTest {
 
     @Test
     public void test_for_finding_paternal_aunt_return_empty_list() {
-        Fetchable paternalAuntFetcher = (FetchPaternalAunt) Graph.getInstance()
+        Fetchable paternalAuntFetcher = (Fetchable) Graph.getInstance()
                 .getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_PATERNAL_AUNT]);
         IFamilyMember person = Graph.getInstance().createNewFamilyMember("Yodhan");
 

@@ -159,10 +159,16 @@ public class GraphBuilder{
         LinkedList<IFamilyMember> relationList = new LinkedList<>();
         
         IFamilyMember personToGetRelationship = Graph.getInstance().createNewFamilyMember(splitted_command_list[1]);
-        if(Constants.RELATION_MATERNAL_AUNT.equals(splitted_command_list[2])){
-            Fetchable fetcher = (FetchMaternalAunt)Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_FETCH_MATERNAL_AUNT]);
-            relationList = fetcher.fetchPersonInRelation(personToGetRelationship, Graph.getInstance().getLatestFamilyTree());
+        for(int i = 0; i < Constants.EXTERNAL_RELATION_TYPE.length; i++){
+            if (Constants.EXTERNAL_RELATION_TYPE[i].equals(splitted_command_list[2])) {
+                
+                Fetchable fetcher = (Fetchable) Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[i]);
+                
+                relationList = fetcher.fetchPersonInRelation(personToGetRelationship,
+                        Graph.getInstance().getLatestFamilyTree());
+            }
         }
+        
         //TODO : NEED TO ADD MORE TYPE OF RELATIONSHIP
 
 

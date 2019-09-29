@@ -53,7 +53,7 @@ public class Constants {
     public static final String CHILD_ADDITION_SUCCEEDED = "CHILD_ADDITION_SUCCEEDED";
 
 
-    public static final String RELATION_MATERNAL_AUNT = "Maternal-Aunt";
+    public static final String[] EXTERNAL_RELATION_TYPE = new String[]{"Maternal-Aunt"};
     Constants()
     {
         throw new RuntimeException("Constant class cannot be instantiated");
