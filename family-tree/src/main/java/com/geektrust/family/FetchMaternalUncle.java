@@ -16,6 +16,7 @@ public class FetchMaternalUncle implements Fetchable {
     private LinkedList<IFamilyMember> maternalUncleList = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
     private Boolean IS_FROM_FATHER_SIDE = false;
+
     public FetchMaternalUncle() {
 
     }
@@ -58,13 +59,13 @@ public class FetchMaternalUncle implements Fetchable {
             mother = this.hasWife(member);
             IS_FROM_FATHER_SIDE = true;
             father = member;
-            maternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind, 
+            maternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
                     IS_FROM_FATHER_SIDE);
         } else if (this.hasHusband(member) != null) {
             mother = member;
             father = this.hasHusband(member);
             IS_FROM_FATHER_SIDE = false;
-            maternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind, 
+            maternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
                     IS_FROM_FATHER_SIDE);
         }
 
@@ -73,22 +74,20 @@ public class FetchMaternalUncle implements Fetchable {
 
     private LinkedList<IFamilyMember> processSecondGenChildren(IFamilyMember grandParent, IFamilyMember father,
             IFamilyMember mother, IFamilyMember familyMemberToFind, Boolean IS_FROM_FATHER_SIDE) {
-            if(IS_FROM_FATHER_SIDE){
-                return maternalUncleList;
-            }
-            else{
-                Map<IFamilyMember, IRelationship> children = mother.getRelatioshipList();
-                for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-                    if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
-                            && FAMILY_MEMBER_FOUND == false) {
-                        FAMILY_MEMBER_FOUND = true;
-                        maternalUncleList = this.processMaleSibling(grandParent, father);
-                        break;
-                    }
+        if (IS_FROM_FATHER_SIDE) {
+            return maternalUncleList;
+        } else {
+            Map<IFamilyMember, IRelationship> children = mother.getRelatioshipList();
+            for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+                if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
+                        && FAMILY_MEMBER_FOUND == false) {
+                    FAMILY_MEMBER_FOUND = true;
+                    maternalUncleList = this.processMaleSibling(grandParent, father);
+                    break;
                 }
             }
-            
-        
+        }
+
         return maternalUncleList;
     }
 

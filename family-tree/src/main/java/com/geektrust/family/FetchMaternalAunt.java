@@ -59,12 +59,14 @@ public class FetchMaternalAunt implements Fetchable {
             mother = this.hasWife(member);
             IS_FROM_FATHER_SIDE = true;
             father = member;
-            maternalAuntList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind, IS_FROM_FATHER_SIDE);
+            maternalAuntList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
+                    IS_FROM_FATHER_SIDE);
         } else if (this.hasHusband(member) != null) {
             mother = member;
             father = this.hasHusband(member);
             IS_FROM_FATHER_SIDE = false;
-            maternalAuntList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind, IS_FROM_FATHER_SIDE);
+            maternalAuntList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
+                    IS_FROM_FATHER_SIDE);
         }
 
         return maternalAuntList;
@@ -72,21 +74,19 @@ public class FetchMaternalAunt implements Fetchable {
 
     private LinkedList<IFamilyMember> processSecondGenChildren(IFamilyMember grandParent, IFamilyMember father,
             IFamilyMember mother, IFamilyMember familyMemberToFind, Boolean IS_FROM_FATHER_SIDE) {
-            if(IS_FROM_FATHER_SIDE){
-                return maternalAuntList;
-            }
-            else{
-                Map<IFamilyMember, IRelationship> children = mother.getRelatioshipList();
-                for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-                    if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
-                            && FAMILY_MEMBER_FOUND == false) {
-                        FAMILY_MEMBER_FOUND = true;
-                        maternalAuntList = this.processFemaleSibling(grandParent, mother);
-                        break;
-                    }
+        if (IS_FROM_FATHER_SIDE) {
+            return maternalAuntList;
+        } else {
+            Map<IFamilyMember, IRelationship> children = mother.getRelatioshipList();
+            for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+                if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
+                        && FAMILY_MEMBER_FOUND == false) {
+                    FAMILY_MEMBER_FOUND = true;
+                    maternalAuntList = this.processFemaleSibling(grandParent, mother);
+                    break;
                 }
             }
-            
+        }
 
         return maternalAuntList;
     }

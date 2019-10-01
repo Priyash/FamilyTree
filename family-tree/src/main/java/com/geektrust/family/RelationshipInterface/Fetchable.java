@@ -10,4 +10,5 @@ import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
 public interface Fetchable {
 
     LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMember, LinkedList<IFamilyMember> familyTree);
+    
 }

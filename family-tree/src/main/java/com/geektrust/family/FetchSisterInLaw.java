@@ -14,7 +14,7 @@ import com.geektrust.family.Utility.Constants;
 public class FetchSisterInLaw implements Fetchable {
     private LinkedList<IFamilyMember> sister_in_laws = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
-    
+
     @Override
     public LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMemberToFind,
             LinkedList<IFamilyMember> familyTree) {
@@ -36,35 +36,35 @@ public class FetchSisterInLaw implements Fetchable {
      */
     private LinkedList<IFamilyMember> find_family_member(IFamilyMember root, IFamilyMember familyMemberToFind) {
         sister_in_laws = this.getTotalSisterInLaws(root, familyMemberToFind);
-        if(sister_in_laws.size() == 0 && FAMILY_MEMBER_FOUND == false)
-        {
+        if (sister_in_laws.size() == 0 && FAMILY_MEMBER_FOUND == false) {
             Map<IFamilyMember, IRelationship> children = root.getRelatioshipList();
             for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
                 find_family_member(entry.getKey(), familyMemberToFind);
             }
         }
-        
+
         return sister_in_laws;
     }
-    
+
     /**
      * This API accumulates total number of sister-in-law found from a given person.
      * 
      * @param root
      * @param familyMemberToFind
-     * @return <code>LinkedList</code> of type <code>IFamilyMember</code> which holds total number sister-in-law objects.
+     * @return <code>LinkedList</code> of type <code>IFamilyMember</code> which
+     *         holds total number sister-in-law objects.
      */
-    private LinkedList<IFamilyMember> getTotalSisterInLaws(IFamilyMember root, IFamilyMember familyMemberToFind)
-    {
+    private LinkedList<IFamilyMember> getTotalSisterInLaws(IFamilyMember root, IFamilyMember familyMemberToFind) {
         sister_in_laws = this.getSisterInLaws_V1(root, familyMemberToFind);
         sister_in_laws = this.getSisterInLaws_V2(root, familyMemberToFind);
         return sister_in_laws;
     }
 
-    //===========================================SECTION_V1_FOR_FIRST_LOGIC_START====================================================
-    
+    // ===========================================SECTION_V1_FOR_FIRST_LOGIC_START====================================================
+
     /**
      * This API used for getting the sister-in-law i.e getting the wife's sister.
+     * 
      * @param familyMember
      * @param familyMemberToFind
      * @return The list of the sister-in-law from the given person as a query
@@ -86,9 +86,11 @@ public class FetchSisterInLaw implements Fetchable {
 
     /**
      * This API used to check whether siblings has husband or not .
+     * 
      * @param wife
      * @param familyMemberToFind
-     * @return This return a boolean value which determines siblings has husband or not 
+     * @return This return a boolean value which determines siblings has husband or
+     *         not
      * 
      */
     private Boolean hasHusband(IFamilyMember wife, IFamilyMember familyMemberToFind) {
@@ -105,9 +107,9 @@ public class FetchSisterInLaw implements Fetchable {
         return hasHusband;
     }
 
-
     /**
      * THIS API is used to get number of sister wife has in family tree.
+     * 
      * @param familyMember
      * @param member
      * @return A list which has siblings sister.
@@ -125,10 +127,9 @@ public class FetchSisterInLaw implements Fetchable {
     }
 
     // ===========================================SECTION_V1_FOR_FIRST_LOGIC_END====================================================
-    
-    
+
     // ===========================================SECTION_V2_FOR_FIRST_LOGIC_START====================================================
-    
+
     /**
      * This API used for getting the sister-in-law i.e getting the sibling's wife
      * 
@@ -148,13 +149,13 @@ public class FetchSisterInLaw implements Fetchable {
 
         return sister_in_laws;
     }
-    
-    
+
     /**
      * //This API is used to get number of wives from siblings
+     * 
      * @param familyMember
      * @param familyMemberToFind
-     * @return A list of type which contains number of wives of the siblings  
+     * @return A list of type which contains number of wives of the siblings
      */
     private LinkedList<IFamilyMember> getBrothersWives(IFamilyMember familyMember, IFamilyMember familyMemberToFind) {
         LinkedList<IFamilyMember> wives = new LinkedList<>();
@@ -173,7 +174,8 @@ public class FetchSisterInLaw implements Fetchable {
      * This API used to check whether the family member has a wife or not .
      * 
      * @param member
-     * @return variable of type <code>IFamilyMember</code> pointing to the wife object if family member has a wife.
+     * @return variable of type <code>IFamilyMember</code> pointing to the wife
+     *         object if family member has a wife.
      */
     private IFamilyMember hasWife(IFamilyMember member) {
         IFamilyMember wife = null;
@@ -188,7 +190,6 @@ public class FetchSisterInLaw implements Fetchable {
         return wife;
     }
 
-
     // ===========================================SECTION_V1_FOR_FIRST_LOGIC_END====================================================
-    
+
 }

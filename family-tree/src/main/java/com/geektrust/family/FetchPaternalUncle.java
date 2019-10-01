@@ -16,6 +16,7 @@ public class FetchPaternalUncle implements Fetchable {
     private LinkedList<IFamilyMember> paternalUncleList = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
     private Boolean IS_FROM_MOTHER_SIDE = false;
+
     public FetchPaternalUncle() {
 
     }
@@ -23,18 +24,17 @@ public class FetchPaternalUncle implements Fetchable {
     @Override
     public LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMemberToFind,
             LinkedList<IFamilyMember> familyTree) {
-        
+
         for (IFamilyMember family_person : familyTree) {
             paternalUncleList = find_family_member(family_person, familyMemberToFind);
         }
         return paternalUncleList;
     }
 
-
     private LinkedList<IFamilyMember> find_family_member(IFamilyMember root, IFamilyMember familyMemberToFind) {
-        //paternalUncleList = this.processFirstGenChildren(root, familyMemberToFind);
+        // paternalUncleList = this.processFirstGenChildren(root, familyMemberToFind);
         Map<IFamilyMember, IRelationship> children = root.getRelatioshipList();
-        
+
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             paternalUncleList = this.processFirstGenChildren(root, entry.getKey(), familyMemberToFind);
         }
@@ -50,59 +50,56 @@ public class FetchPaternalUncle implements Fetchable {
         return paternalUncleList;
     }
 
-    private LinkedList<IFamilyMember> processFirstGenChildren(IFamilyMember parent, IFamilyMember member, IFamilyMember familyMemberToFind)
-    {
+    private LinkedList<IFamilyMember> processFirstGenChildren(IFamilyMember parent, IFamilyMember member,
+            IFamilyMember familyMemberToFind) {
         IFamilyMember father = null;
         IFamilyMember mother = null;
 
-        if(this.hasWife(member) != null){
+        if (this.hasWife(member) != null) {
             mother = this.hasWife(member);
             IS_FROM_MOTHER_SIDE = false;
             father = member;
-            paternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind, 
+            paternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
                     IS_FROM_MOTHER_SIDE);
-        }
-        else if(this.hasHusband(member) != null){
+        } else if (this.hasHusband(member) != null) {
             mother = member;
             father = this.hasHusband(member);
             IS_FROM_MOTHER_SIDE = true;
-            paternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind, 
+            paternalUncleList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
                     IS_FROM_MOTHER_SIDE);
         }
 
         return paternalUncleList;
     }
 
-    
-
     private LinkedList<IFamilyMember> processSecondGenChildren(IFamilyMember grandParent, IFamilyMember father,
             IFamilyMember mother, IFamilyMember familyMemberToFind, Boolean IS_FROM_MOTHER_SIDE) {
-            
-            if(IS_FROM_MOTHER_SIDE){
-                return paternalUncleList;
-            }
-            else{
-                Map<IFamilyMember, IRelationship> children = mother.getRelatioshipList();
-                for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-                    if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
-                            && FAMILY_MEMBER_FOUND == false) {
-                        FAMILY_MEMBER_FOUND = true;
-                        paternalUncleList = this.processMaleSibling(grandParent, father);
-                        break;
-                    }
+
+        if (IS_FROM_MOTHER_SIDE) {
+            return paternalUncleList;
+        } else {
+            Map<IFamilyMember, IRelationship> children = mother.getRelatioshipList();
+            for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+                if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
+                        && FAMILY_MEMBER_FOUND == false) {
+                    FAMILY_MEMBER_FOUND = true;
+                    paternalUncleList = this.processMaleSibling(grandParent, father);
+                    break;
                 }
             }
+        }
         return paternalUncleList;
     }
 
-    private LinkedList<IFamilyMember> processMaleSibling(IFamilyMember grandParent, IFamilyMember father){
+    private LinkedList<IFamilyMember> processMaleSibling(IFamilyMember grandParent, IFamilyMember father) {
 
         Map<IFamilyMember, IRelationship> children = grandParent.getRelatioshipList();
-            for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-                if(entry.getValue().getRelationType().equals(Constants.SON) && !entry.getKey().getMemberName().equals(father.getMemberName())){
-                    paternalUncleList.add(entry.getKey());
-                }
+        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.SON)
+                    && !entry.getKey().getMemberName().equals(father.getMemberName())) {
+                paternalUncleList.add(entry.getKey());
             }
+        }
 
         return paternalUncleList;
     }
@@ -111,7 +108,7 @@ public class FetchPaternalUncle implements Fetchable {
         IFamilyMember wife = null;
         Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if(entry.getValue().getRelationType().equals(Constants.WIFE)){
+            if (entry.getValue().getRelationType().equals(Constants.WIFE)) {
                 wife = entry.getKey();
             }
         }
@@ -122,7 +119,7 @@ public class FetchPaternalUncle implements Fetchable {
         IFamilyMember husband = null;
         Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if(entry.getValue().getRelationType().equals(Constants.HUSBAND)){
+            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)) {
                 husband = entry.getKey();
             }
         }

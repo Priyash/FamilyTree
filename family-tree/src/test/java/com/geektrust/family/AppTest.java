@@ -90,7 +90,7 @@ public class AppTest {
     {
         Fetchable fetcher = (Fetchable)
         Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_SON]);
-        IFamilyMember person1 = Graph.getInstance().createNewFamilyMember("Satya");
+        IFamilyMember person1 = Graph.getInstance().createNewFamilyMember("Vyan");
         LinkedList<IFamilyMember> sons = fetcher.fetchPersonInRelation(person1,
         familyTree);
 
@@ -101,11 +101,11 @@ public class AppTest {
 
     @Test
     public void test_for_finding_daughters_returns_non_empty_list() {
-        Fetchable dughterfetcher = (Fetchable)
+        Fetchable daughterFetcher = (Fetchable)
         Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[Constants.FETCH_RELATION_TYPE_DAUGHTER]);
-        IFamilyMember person2 = Graph.getInstance().createNewFamilyMember("Lika");
+        IFamilyMember person2 = Graph.getInstance().createNewFamilyMember("Vich");
         LinkedList<IFamilyMember> daughters =
-        dughterfetcher.fetchPersonInRelation(person2, familyTree);
+                daughterFetcher.fetchPersonInRelation(person2, familyTree);
 
         assertThat(non_empty_daughter_list.get(0), is(daughters.get(0).getMemberName()));
         assertThat(non_empty_daughter_list.get(1), is(daughters.get(1).getMemberName()));
