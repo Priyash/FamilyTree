@@ -7,6 +7,8 @@ import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.Utility.Constants;
+import com.geektrust.family.Utility.FamilyCheckable;
+import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * FetchSons
@@ -14,6 +16,7 @@ import com.geektrust.family.Utility.Constants;
 public class FetchSisterInLaw implements Fetchable {
     private LinkedList<IFamilyMember> sister_in_laws = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
+    private FamilyCheckable checker = new FamilyCheckerUtils();
 
     @Override
     public LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMemberToFind,
@@ -74,56 +77,15 @@ public class FetchSisterInLaw implements Fetchable {
         Map<IFamilyMember, IRelationship> children = familyMember.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)) {
-                if (this.hasHusband(entry.getKey(), familyMemberToFind)) {
-                    sister_in_laws = this.getSisters(familyMember, entry.getKey());
+                if (checker.hasHusband(entry.getKey(), familyMemberToFind, FAMILY_MEMBER_FOUND)) {
+                    FAMILY_MEMBER_FOUND = true;
+                    sister_in_laws = checker.getSistersForSisterInLaw(familyMember, entry.getKey());
                     break;
                 }
             }
         }
 
         return sister_in_laws;
-    }
-
-    /**
-     * This API used to check whether siblings has husband or not .
-     * 
-     * @param wife
-     * @param familyMemberToFind
-     * @return This return a boolean value which determines siblings has husband or
-     *         not
-     * 
-     */
-    private Boolean hasHusband(IFamilyMember wife, IFamilyMember familyMemberToFind) {
-        Boolean hasHusband = false;
-        Map<IFamilyMember, IRelationship> wife_relations = wife.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : wife_relations.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.HUSBAND) && FAMILY_MEMBER_FOUND == false
-                    && entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())) {
-                FAMILY_MEMBER_FOUND = true;
-                hasHusband = true;
-                break;
-            }
-        }
-        return hasHusband;
-    }
-
-    /**
-     * THIS API is used to get number of sister wife has in family tree.
-     * 
-     * @param familyMember
-     * @param member
-     * @return A list which has siblings sister.
-     */
-    private LinkedList<IFamilyMember> getSisters(IFamilyMember familyMember, IFamilyMember member) {
-        LinkedList<IFamilyMember> sisters = new LinkedList<>();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : familyMember.getRelatioshipList().entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)
-                    && !entry.getKey().getMemberName().equals(member.getMemberName())) {
-                sisters.add(entry.getKey());
-            }
-        }
-
-        return sisters;
     }
 
     // ===========================================SECTION_V1_FOR_FIRST_LOGIC_END====================================================
@@ -162,32 +124,12 @@ public class FetchSisterInLaw implements Fetchable {
         Map<IFamilyMember, IRelationship> children = familyMember.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             if (!entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
-                    && this.hasWife(entry.getKey()) != null) {
-                wives.add(this.hasWife(entry.getKey()));
+                    && checker.hasWife(entry.getKey()) != null) {
+                wives.add(checker.hasWife(entry.getKey()));
             }
         }
 
         return wives;
-    }
-
-    /**
-     * This API used to check whether the family member has a wife or not .
-     * 
-     * @param member
-     * @return variable of type <code>IFamilyMember</code> pointing to the wife
-     *         object if family member has a wife.
-     */
-    private IFamilyMember hasWife(IFamilyMember member) {
-        IFamilyMember wife = null;
-        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.WIFE)) {
-                wife = entry.getKey();
-                break;
-            }
-        }
-
-        return wife;
     }
 
     // ===========================================SECTION_V1_FOR_FIRST_LOGIC_END====================================================

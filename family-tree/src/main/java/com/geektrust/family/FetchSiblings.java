@@ -7,13 +7,15 @@ import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.Utility.Constants;
+import com.geektrust.family.Utility.FamilyCheckable;
+import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * FetchSons
  */
 public class FetchSiblings implements Fetchable {
     private LinkedList<IFamilyMember> siblings = new LinkedList<>();
-
+    private FamilyCheckable checker = new FamilyCheckerUtils();
     @Override
     public LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMemberToFind,
             LinkedList<IFamilyMember> familyTree) {
@@ -25,7 +27,7 @@ public class FetchSiblings implements Fetchable {
     }
 
     private LinkedList<IFamilyMember> find_family_member(IFamilyMember root, IFamilyMember familyMemberToFind) {
-        siblings = this.getSiblings(root, familyMemberToFind);
+        siblings = checker.getSiblings(root, familyMemberToFind);
         if (siblings.size() == 0) {
             Map<IFamilyMember, IRelationship> children = root.getRelatioshipList();
             for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
@@ -35,32 +37,4 @@ public class FetchSiblings implements Fetchable {
 
         return siblings;
     }
-
-    private LinkedList<IFamilyMember> getSiblings(IFamilyMember root, IFamilyMember familyMemberToFind) {
-        Map<IFamilyMember, IRelationship> children = root.getRelatioshipList();
-        Boolean found_member = false;
-        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if(entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName()))
-            {
-                found_member = true;
-                break;
-            }
-        }
-
-        if(found_member)
-        {
-            for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-                if ((entry.getValue().getRelationType().equals(Constants.SON)
-                        || entry.getValue().getRelationType().equals(Constants.DAUGHTER))
-                        && !entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())) {
-                    siblings.add(entry.getKey());
-                }
-            }
-        }
-        
-        return siblings;
-    }
-
-    
-
 }

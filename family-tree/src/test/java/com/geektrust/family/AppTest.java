@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
+import com.geektrust.family.GraphInterface.IBuildable;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.Utility.Constants;
 import static org.hamcrest.CoreMatchers.*;
@@ -36,13 +37,12 @@ public class AppTest {
     @BeforeClass
     public static void init()
     {
-        GraphBuilder builder = new GraphBuilder();
+        IBuildable internalBuilder = new InternalGraphBuilder();
+        internalBuilder.build();
 
         IFamilyMember family_root_female = Graph.getInstance().createNewFamilyMember("Anga");
         Graph.getInstance().addToFamilyTree(family_root_female);
 
-        List<String> family_data_list = builder.createEmptyFamilyDataList();
-        builder.build_family_tree(family_data_list);
         familyTree = Graph.getInstance().getLatestFamilyTree();
 
         non_empty_sister_in_law_list.add("Amba");

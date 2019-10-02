@@ -16,12 +16,12 @@ public interface FamilyCheckable {
     IFamilyMember hasWife(IFamilyMember member);
     
     LinkedList<IFamilyMember> getChildren(IFamilyMember familyPerson, IRelationship relation);
-    LinkedList<IFamilyMember> getSiblings(IFamilyMember siblings);
+    
+    LinkedList<IFamilyMember> getSistersForSisterInLaw(IFamilyMember familyMember, IFamilyMember member);
+    LinkedList<IFamilyMember> getBrothersForBrotherInlaw(IFamilyMember sister);
+    
+    LinkedList<IFamilyMember> getSiblings(IFamilyMember siblings, IFamilyMember familyMemberToFind);
 
-    LinkedList<IFamilyMember> processFirstGenChildren(IFamilyMember parent, IFamilyMember member,IFamilyMember familyMemberToFind);
-    LinkedList<IFamilyMember> processSecondGenChildren(IFamilyMember grandParent, IFamilyMember father,IFamilyMember mother, IFamilyMember familyMemberToFind, Boolean IS_MOM_OR_DAD_SIDE);
-
-
-    LinkedList<IFamilyMember> processSibling(IFamilyMember grandParent, IFamilyMember father, IRelationship relation);
+    public Boolean hasMarried(IFamilyMember member);
     
 } 

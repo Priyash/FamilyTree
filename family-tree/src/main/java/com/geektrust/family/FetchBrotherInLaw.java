@@ -7,6 +7,8 @@ import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.Utility.Constants;
+import com.geektrust.family.Utility.FamilyCheckable;
+import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * FetchSons
@@ -14,7 +16,8 @@ import com.geektrust.family.Utility.Constants;
 public class FetchBrotherInLaw implements Fetchable {
     private LinkedList<IFamilyMember> brother_in_laws = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
-
+    private FamilyCheckable checker = new FamilyCheckerUtils();
+    
     @Override
     public LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMemberToFind,
             LinkedList<IFamilyMember> familyTree) {
@@ -59,43 +62,14 @@ public class FetchBrotherInLaw implements Fetchable {
         Map<IFamilyMember, IRelationship> children = familyMember.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)) {
-                if (this.hasHusband(entry.getKey(), familyMemberToFind)) {
-
-                    brother_in_laws = this.getBrothers(familyMember);
+                if (checker.hasHusband(entry.getKey(), familyMemberToFind, FAMILY_MEMBER_FOUND)) {
+                    FAMILY_MEMBER_FOUND = true;
+                    brother_in_laws = checker.getBrothersForBrotherInlaw(familyMember);
                 }
             }
         }
 
         return brother_in_laws;
-    }
-
-    // WIFE'S HUSBAND'S BROTHER SEARCH
-    private LinkedList<IFamilyMember> getBrothers(IFamilyMember sister) {
-        LinkedList<IFamilyMember> brothers = new LinkedList<>();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : sister.getRelatioshipList().entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.SON)) {
-                brothers.add(entry.getKey());
-            }
-        }
-
-        return brothers;
-    }
-
-    // THIS FUNCTION CHECKS A DAUGHTER BELONG TO A TREE HAS A HUSBAND OR NOT [GIVEN
-    // HUSBAND NAME IN THE QUERY FOR BROTHER-IN-LAW SEARCH]
-    private Boolean hasHusband(IFamilyMember member, IFamilyMember familyMemberToFind) {
-        Boolean hasHusband = false;
-        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)
-                    && entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
-                    && FAMILY_MEMBER_FOUND == false) {
-                FAMILY_MEMBER_FOUND = true;
-                hasHusband = true;
-                break;
-            }
-        }
-        return hasHusband;
     }
 
     // GETTING THE BROTHER-IN-LAWS FOR THE LOGIC of SIBLINGS HUSBAND
@@ -103,27 +77,13 @@ public class FetchBrotherInLaw implements Fetchable {
         Map<IFamilyMember, IRelationship> children = familyMember.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)) {
-                if (this.hasHusband(entry.getKey()) != null) {
-                    brother_in_laws.add(this.hasHusband(entry.getKey()));
+                if (checker.hasHusband(entry.getKey()) != null) {
+                    brother_in_laws.add(checker.hasHusband(entry.getKey()));
                 }
             }
         }
 
         return brother_in_laws;
-    }
-
-    // THIS FUNCTION CHECKS A DAUGHTER BELONG TO A TREE HAS A HUSBAND OR
-    // NOT[OVERLOADED FUNCTION FOR ANOTHER LOGIC]
-    private IFamilyMember hasHusband(IFamilyMember member) {
-        IFamilyMember hasHusband = null;
-        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)) {
-                hasHusband = entry.getKey();
-                break;
-            }
-        }
-        return hasHusband;
     }
 
 }

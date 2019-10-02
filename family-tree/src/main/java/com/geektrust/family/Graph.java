@@ -9,6 +9,8 @@ import com.geektrust.family.GenderInterface.IGender;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.Utility.Constants;
+import com.geektrust.family.Utility.FamilyCheckable;
+import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * Graph class which constructs the family tree 
@@ -18,6 +20,7 @@ public class Graph {
     private LinkedList<IFamilyMember> familyTree;
     private static Graph graph = null;
     public Boolean CHILD_ADDITION_SUCCEEDED = false;
+    private FamilyCheckable checker = new FamilyCheckerUtils();
 
     private Graph() {
         familyTree = new LinkedList<>();
@@ -29,6 +32,14 @@ public class Graph {
         }
 
         return graph;
+    }
+
+    public Boolean isChildAdded(){
+        return CHILD_ADDITION_SUCCEEDED;
+    }
+
+    public void setChildAdditionValue(Boolean ChildAdded){
+        this.CHILD_ADDITION_SUCCEEDED = ChildAdded;
     }
 
     public IFamilyMember createNewFamilyMember(String memberName) {
@@ -45,6 +56,10 @@ public class Graph {
 
     public LinkedList<IFamilyMember> getLatestFamilyTree() {
         return familyTree;
+    }
+
+    public void setLatestFamilyTree(LinkedList<IFamilyMember> familyTree){
+        this.familyTree = familyTree;
     }
 
     public void update_family_tree(IFamilyMember existingFamilyPerson, IFamilyMember newFamilyPerson,IRelationship relation) {
@@ -69,7 +84,7 @@ public class Graph {
             Map<IFamilyMember, IRelationship> fam_list = root.getRelatioshipList();
             if (fam_list != null || !fam_list.isEmpty()) {
                 for (Map.Entry<IFamilyMember, IRelationship> entry : fam_list.entrySet()) {
-                    if (entry.getKey().getMemberName().equals(existingFamilyPerson.getMemberName()) && this.hasMarried(entry.getKey())) {
+                    if (entry.getKey().getMemberName().equals(existingFamilyPerson.getMemberName()) && checker.hasMarried(entry.getKey())) {
                         entry.getKey().addRelationship(newFamilyPerson, relation);
                         CHILD_ADDITION_SUCCEEDED = true;
                         break;
@@ -81,19 +96,11 @@ public class Graph {
         }
     }
 
-    private Boolean hasMarried(IFamilyMember member)
-    {
-        Boolean hasHusband = false;
-        Map<IFamilyMember, IRelationship> fam_list = member.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : fam_list.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)) {
-                hasHusband = true;
-            }
-        }
-
-        return hasHusband;
-    }
-
+    /**
+     * 
+     * @param fetcher
+     * @return an object which needs to be casted with corresponding Fetachable class
+     */
     public Object getRelationShip(String fetcher) {
 
         Object object = null;
@@ -109,4 +116,5 @@ public class Graph {
 
         return object;
     }
+
 }

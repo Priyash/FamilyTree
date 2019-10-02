@@ -10,8 +10,7 @@ import com.geektrust.family.RelationshipInterface.IRelationship;
  * FamilyCheckerUtils
  */
 public class FamilyCheckerUtils implements FamilyCheckable {
-
-
+    LinkedList<IFamilyMember> siblings = new LinkedList<>();
     public FamilyCheckerUtils (){
         
     }
@@ -29,6 +28,16 @@ public class FamilyCheckerUtils implements FamilyCheckable {
         return husband;
     }
 
+    /**
+     * This API used to check whether siblings has husband or not .
+     * 
+     * @param member
+     * @param familyMemberToFind
+     * @param FAMILY_MEMBER_FOUND
+     * @return This return a boolean value which determines siblings has husband or
+     *         not
+     * 
+     */
     @Override
     public Boolean hasHusband(IFamilyMember member, IFamilyMember familyMemberToFind, Boolean FAMILY_MEMBER_FOUND) {
         Boolean hasHusband = false;
@@ -44,6 +53,13 @@ public class FamilyCheckerUtils implements FamilyCheckable {
         return hasHusband;
     }
 
+    /**
+     * This API used to check whether the family member has a wife or not .
+     * 
+     * @param member
+     * @return variable of type <code>IFamilyMember</code> pointing to the wife
+     *         object if family member has a wife.
+     */
     @Override
     public IFamilyMember hasWife(IFamilyMember member) {
         IFamilyMember wife = null;
@@ -72,32 +88,69 @@ public class FamilyCheckerUtils implements FamilyCheckable {
         return children;
     }
 
+   
+
     @Override
-    public LinkedList<IFamilyMember> getSiblings(IFamilyMember siblings) {
-        // TODO Auto-generated method stub
-        return null;
+    public LinkedList<IFamilyMember> getSiblings(IFamilyMember root, IFamilyMember familyMemberToFind) {
+        
+        Map<IFamilyMember, IRelationship> children = root.getRelatioshipList();
+        
+        Boolean found_member = false;
+        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+            if (entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())) {
+                found_member = true;
+                break;
+            }
+        }
+
+        if (found_member) {
+            for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+                    if ((entry.getValue().getRelationType().equals(Constants.SON)
+                        || entry.getValue().getRelationType().equals(Constants.DAUGHTER))
+                        && !entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())) {
+                    siblings.add(entry.getKey());
+                }
+            }
+        }
+
+        return siblings;
+    }
+   
+    @Override
+    public LinkedList<IFamilyMember> getSistersForSisterInLaw(IFamilyMember familyMember, IFamilyMember member) {
+        LinkedList<IFamilyMember> sisters = new LinkedList<>();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : familyMember.getRelatioshipList().entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)
+                    && !entry.getKey().getMemberName().equals(member.getMemberName())) {
+                sisters.add(entry.getKey());
+            }
+        }
+
+        return sisters;
     }
 
     @Override
-    public LinkedList<IFamilyMember> processFirstGenChildren(IFamilyMember parent, IFamilyMember member,
-            IFamilyMember familyMemberToFind) {
-        // TODO Auto-generated method stub
-        return null;
+    public LinkedList<IFamilyMember> getBrothersForBrotherInlaw(IFamilyMember sister) {
+        LinkedList<IFamilyMember> brothers = new LinkedList<>();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : sister.getRelatioshipList().entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.SON)) {
+                brothers.add(entry.getKey());
+            }
+        }
+        return brothers;
     }
 
-    @Override
-    public LinkedList<IFamilyMember> processSecondGenChildren(IFamilyMember grandParent, IFamilyMember father,
-            IFamilyMember mother, IFamilyMember familyMemberToFind, Boolean IS_MOM_OR_DAD_SIDE) {
-        // TODO Auto-generated method stub
-        return null;
+
+    public Boolean hasMarried(IFamilyMember member) {
+        Boolean hasHusband = false;
+        Map<IFamilyMember, IRelationship> fam_list = member.getRelatioshipList();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : fam_list.entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)) {
+                hasHusband = true;
+            }
+        }
+
+        return hasHusband;
     }
 
-    @Override
-    public LinkedList<IFamilyMember> processSibling(IFamilyMember grandParent, IFamilyMember father,
-            IRelationship relation) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    
 }

@@ -51,9 +51,12 @@ public class Constants {
 
     public static final String CHILD_ADDITION_FAILED = "CHILD_ADDITION_FAILED";
     public static final String CHILD_ADDITION_SUCCEEDED = "CHILD_ADDITION_SUCCEEDED";
+    public static final String NONE = "NONE";
 
 
-    public static final String[] EXTERNAL_RELATION_TYPE = new String[]{"Maternal-Aunt"};
+    public static final String[] EXTERNAL_RELATION_TYPE = new String[]{"Son","Daughter","Brother-In-Law","Sister-In-Law",
+                                                                        "Siblings","Maternal-Aunt", "Maternal-Uncle", 
+                                                                        "Paternal-Uncle", "Paternal-Aunt"};
     Constants()
     {
         throw new RuntimeException("Constant class cannot be instantiated");

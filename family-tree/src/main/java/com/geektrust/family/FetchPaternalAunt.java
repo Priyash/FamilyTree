@@ -7,6 +7,8 @@ import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.Utility.Constants;
+import com.geektrust.family.Utility.FamilyCheckable;
+import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * FetchMaternalAunt
@@ -16,7 +18,7 @@ public class FetchPaternalAunt implements Fetchable {
     private LinkedList<IFamilyMember> paternalAuntList = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
     private Boolean IS_FROM_MOTHER_SIDE = false;
-
+    private FamilyCheckable checker = new FamilyCheckerUtils();
     public FetchPaternalAunt() {
 
     }
@@ -55,15 +57,15 @@ public class FetchPaternalAunt implements Fetchable {
         IFamilyMember father = null;
         IFamilyMember mother = null;
 
-        if (this.hasWife(member) != null) {
-            mother = this.hasWife(member);
+        if (checker.hasWife(member) != null) {
+            mother = checker.hasWife(member);
             IS_FROM_MOTHER_SIDE = false;
             father = member;
             paternalAuntList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
                     IS_FROM_MOTHER_SIDE);
-        } else if (this.hasHusband(member) != null) {
+        } else if (checker.hasHusband(member) != null) {
             mother = member;
-            father = this.hasHusband(member);
+            father = checker.hasHusband(member);
             IS_FROM_MOTHER_SIDE = true;
             paternalAuntList = this.processSecondGenChildren(parent, father, mother, familyMemberToFind,
                     IS_FROM_MOTHER_SIDE);
@@ -102,28 +104,6 @@ public class FetchPaternalAunt implements Fetchable {
         }
 
         return paternalAuntList;
-    }
-
-    private IFamilyMember hasWife(IFamilyMember member) {
-        IFamilyMember wife = null;
-        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.WIFE)) {
-                wife = entry.getKey();
-            }
-        }
-        return wife;
-    }
-
-    private IFamilyMember hasHusband(IFamilyMember member) {
-        IFamilyMember husband = null;
-        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
-        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)) {
-                husband = entry.getKey();
-            }
-        }
-        return husband;
     }
 
 }
