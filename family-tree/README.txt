@@ -36,12 +36,12 @@ End with an example of getting some data out of the system or using it for a lit
 ## Running the tests
 
 For running the test need the below dependency snippet in pom.xml
-<dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.12</version>
-    <scope>test</scope>
-</dependency>
+&lt;dependency&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
 
 Then execute the command in commandLine :
 "mvn clean compile test"
