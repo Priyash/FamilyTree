@@ -20,21 +20,15 @@ import com.geektrust.family.Utility.TxtFileDataReader;
 public class ExternalGraphBuilder implements IBuildable{
 
     private List<String> family_data_list = new ArrayList<>();
-
-    
-
+    private List<String> childAdditionList = new ArrayList<>();
     @Override
-    public void build() {
-    }
-
+    public void build() {}
 
     @Override
     public void buildWithExternalFile(String filePath) {
         this.readCommandFromTxtFile(filePath);
         this.processData();
     }
-
-
 
     private List<String> readCommandFromTxtFile(String dataFile) {
         IDataReader build_family_reader = (TxtFileDataReader) DataManager.getInstance()
@@ -50,22 +44,43 @@ public class ExternalGraphBuilder implements IBuildable{
         LinkedList<IFamilyMember> output_relation = null;
         String output_child_addition = "";
         for (String data : family_data_list) {
-            String[] splitted_data = data.split(" ");
-            if (splitted_data[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_GET_RELATIONSHIP])) {
-                output_relation = this.getRelationShip(data);
-                if(output_relation.isEmpty()){
-                    System.out.println(Constants.NONE);
-                }else{
-                    for (int i = 0; i < output_relation.size(); i++) {
-                        System.out.print(output_relation.get(i).getMemberName() + " ");
-                    }
-                    System.out.println();
-                }
-            } else if (splitted_data[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_ADD_CHILD])) {
-                output_child_addition = this.addExternalChild(data);
-                System.out.println(output_child_addition);
-            }
+            this.displayOutput(data, output_relation, output_child_addition);
         }
+    }
+
+    private void displayOutput(String data, LinkedList<IFamilyMember> output_relation, String output_child_addition){
+        String[] splitted_data = data.split(" ");
+        if (splitted_data[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_GET_RELATIONSHIP])) {
+            this.showOutput(data, output_relation, output_child_addition, true);
+        } else if (splitted_data[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_ADD_CHILD])) {
+            this.showOutput(data, output_relation, output_child_addition, false);
+        }
+    }
+
+    private void showOutput(String data, LinkedList<IFamilyMember> output_relation, String output_child_addition, Boolean isRelationOrChildAddition){
+        if (isRelationOrChildAddition){
+            output_relation = this.getRelationShip(data);
+            this.displayOutputForRelationShip(output_relation);
+        }else if(!isRelationOrChildAddition){
+            output_child_addition = this.addExternalChild(data);
+            this.displayOutputForChildAddition(output_child_addition);
+        }
+    }
+
+    private void displayOutputForRelationShip(LinkedList<IFamilyMember> output_relation){
+        if (output_relation.isEmpty()) {
+            System.out.println(Constants.NONE);
+        } else {
+            for (int i = 0; i < output_relation.size(); i++) {
+                System.out.print(output_relation.get(i).getMemberName() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private void displayOutputForChildAddition(String output_child_addition){
+        childAdditionList.add(output_child_addition);
+        System.out.println(output_child_addition);
     }
 
     /**
@@ -84,9 +99,9 @@ public class ExternalGraphBuilder implements IBuildable{
         IFamilyMember existingFamilyMember = Graph.getInstance().createNewFamilyMember(personToSearch);
         IFamilyMember newFamilyMember = Graph.getInstance().createNewFamilyMember(personToAdd);
         if (personToAddGenderType.equals(Constants.MALE)) {
-            relation = new Son();
+            relation = new Relationship(Constants.SON, Constants.MALE);
         } else {
-            relation = new Daughter();
+            relation = new Relationship(Constants.DAUGHTER, Constants.FEMALE);
         }
 
         Graph.getInstance().update_family_tree(existingFamilyMember, newFamilyMember, relation);
@@ -114,15 +129,16 @@ public class ExternalGraphBuilder implements IBuildable{
 
                 Fetchable fetcher = (Fetchable) Graph.getInstance().getRelationShip(Constants.FETCH_RELATON_TYPE[i]);
 
-                relationList = fetcher.fetchPersonInRelation(personToGetRelationship,
-                        Graph.getInstance().getLatestFamilyTree());
+                relationList = fetcher.fetchPersonInRelation(
+                        personToGetRelationship,
+                        Graph.getInstance().getLatestFamilyTree(), 
+                        new Relationship(Constants.EXTERNAL_RELATION_TYPE[i],
+                                        Constants.EXTERNAL_RELATION_GENDER_TYPE[i]));
                 
             }
         }
-
         return relationList;
     }
 
     
-
 }

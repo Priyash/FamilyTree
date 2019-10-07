@@ -7,8 +7,6 @@ import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.Utility.Constants;
-import com.geektrust.family.Utility.FamilyCheckable;
-import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * FetchSons
@@ -16,14 +14,13 @@ import com.geektrust.family.Utility.FamilyCheckerUtils;
 public class FetchSisterInLaw implements Fetchable {
     private LinkedList<IFamilyMember> sister_in_laws = new LinkedList<>();
     private Boolean FAMILY_MEMBER_FOUND = false;
-    private FamilyCheckable checker = new FamilyCheckerUtils();
 
     @Override
     public LinkedList<IFamilyMember> fetchPersonInRelation(IFamilyMember familyMemberToFind,
-            LinkedList<IFamilyMember> familyTree) {
+            LinkedList<IFamilyMember> familyTree, IRelationship relation) {
         LinkedList<IFamilyMember> sister_in_laws = new LinkedList<>();
         for (IFamilyMember family_person : familyTree) {
-            sister_in_laws = find_family_member(family_person, familyMemberToFind);
+            sister_in_laws = find_family_member(family_person, familyMemberToFind, relation);
         }
         return sister_in_laws;
     }
@@ -34,15 +31,17 @@ public class FetchSisterInLaw implements Fetchable {
      * 
      * @param root
      * @param familyMemberToFind
+     * @param relation
      * @return <code>LinkedList</code> of type <code>IFamilyMember</code> which
      *         holds total number sister-in-law objects.
      */
-    private LinkedList<IFamilyMember> find_family_member(IFamilyMember root, IFamilyMember familyMemberToFind) {
-        sister_in_laws = this.getTotalSisterInLaws(root, familyMemberToFind);
+    private LinkedList<IFamilyMember> find_family_member(IFamilyMember root, IFamilyMember familyMemberToFind,
+            IRelationship relation) {
+        sister_in_laws = this.getTotalSisterInLaws(root, familyMemberToFind, relation);
         if (sister_in_laws.size() == 0 && FAMILY_MEMBER_FOUND == false) {
             Map<IFamilyMember, IRelationship> children = root.getRelatioshipList();
             for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
-                find_family_member(entry.getKey(), familyMemberToFind);
+                find_family_member(entry.getKey(), familyMemberToFind, relation);
             }
         }
 
@@ -54,12 +53,17 @@ public class FetchSisterInLaw implements Fetchable {
      * 
      * @param root
      * @param familyMemberToFind
+     * @param relation
      * @return <code>LinkedList</code> of type <code>IFamilyMember</code> which
      *         holds total number sister-in-law objects.
      */
-    private LinkedList<IFamilyMember> getTotalSisterInLaws(IFamilyMember root, IFamilyMember familyMemberToFind) {
-        sister_in_laws = this.getSisterInLaws_V1(root, familyMemberToFind);
-        sister_in_laws = this.getSisterInLaws_V2(root, familyMemberToFind);
+    private LinkedList<IFamilyMember> getTotalSisterInLaws(IFamilyMember root, IFamilyMember familyMemberToFind,
+            IRelationship relation) {
+        
+        if(relation.getRelationType().equals(Constants.SISTER_IN_LAW)){
+            sister_in_laws = this.getSisterInLaws_V1(root, familyMemberToFind);
+            sister_in_laws = this.getSisterInLaws_V2(root, familyMemberToFind);
+        }
         return sister_in_laws;
     }
 
@@ -70,6 +74,7 @@ public class FetchSisterInLaw implements Fetchable {
      * 
      * @param familyMember
      * @param familyMemberToFind
+     * @param relation
      * @return The list of the sister-in-law from the given person as a query
      *
      */
@@ -77,15 +82,27 @@ public class FetchSisterInLaw implements Fetchable {
         Map<IFamilyMember, IRelationship> children = familyMember.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)) {
-                if (checker.hasHusband(entry.getKey(), familyMemberToFind, FAMILY_MEMBER_FOUND)) {
+                if (this.hasHusband(entry.getKey(), familyMemberToFind, FAMILY_MEMBER_FOUND)) {
                     FAMILY_MEMBER_FOUND = true;
-                    sister_in_laws = checker.getSistersForSisterInLaw(familyMember, entry.getKey());
+                    sister_in_laws = this.getWivesSister(familyMember, entry.getKey());
                     break;
                 }
             }
         }
 
         return sister_in_laws;
+    }
+
+    public LinkedList<IFamilyMember> getWivesSister(IFamilyMember familyMember, IFamilyMember member) {
+        LinkedList<IFamilyMember> sisters = new LinkedList<>();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : familyMember.getRelatioshipList().entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.DAUGHTER)
+                    && !entry.getKey().getMemberName().equals(member.getMemberName())) {
+                sisters.add(entry.getKey());
+            }
+        }
+
+        return sisters;
     }
 
     // ===========================================SECTION_V1_FOR_FIRST_LOGIC_END====================================================
@@ -97,6 +114,7 @@ public class FetchSisterInLaw implements Fetchable {
      * 
      * @param familyMember
      * @param familyMemberToFind
+     * @param relation
      * @return A list which has total number of sister-in-law.
      */
     private LinkedList<IFamilyMember> getSisterInLaws_V2(IFamilyMember familyMember, IFamilyMember familyMemberToFind) {
@@ -124,13 +142,40 @@ public class FetchSisterInLaw implements Fetchable {
         Map<IFamilyMember, IRelationship> children = familyMember.getRelatioshipList();
         for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
             if (!entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
-                    && checker.hasWife(entry.getKey()) != null) {
-                wives.add(checker.hasWife(entry.getKey()));
+                    && this.hasWife(entry.getKey()) != null) {
+                wives.add(this.hasWife(entry.getKey()));
             }
         }
 
         return wives;
     }
+
+    private Boolean hasHusband(IFamilyMember member, IFamilyMember familyMemberToFind, Boolean FAMILY_MEMBER_FOUND) {
+        Boolean hasHusband = false;
+        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)
+                    && entry.getKey().getMemberName().equals(familyMemberToFind.getMemberName())
+                    && FAMILY_MEMBER_FOUND == false) {
+                hasHusband = true;
+                break;
+            }
+        }
+        return hasHusband;
+    }
+
+    public IFamilyMember hasWife(IFamilyMember member) {
+        IFamilyMember wife = null;
+        Map<IFamilyMember, IRelationship> children = member.getRelatioshipList();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : children.entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.WIFE)) {
+                wife = entry.getKey();
+            }
+        }
+        return wife;
+    }
+
+
 
     // ===========================================SECTION_V1_FOR_FIRST_LOGIC_END====================================================
 

@@ -5,12 +5,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import com.geektrust.family.FamilyMemberInterface.IFamilyMember;
-import com.geektrust.family.GenderInterface.IGender;
-import com.geektrust.family.RelationshipInterface.Fetchable;
 import com.geektrust.family.RelationshipInterface.IRelationship;
 import com.geektrust.family.Utility.Constants;
-import com.geektrust.family.Utility.FamilyCheckable;
-import com.geektrust.family.Utility.FamilyCheckerUtils;
 
 /**
  * Graph class which constructs the family tree 
@@ -20,7 +16,7 @@ public class Graph {
     private LinkedList<IFamilyMember> familyTree;
     private static Graph graph = null;
     public Boolean CHILD_ADDITION_SUCCEEDED = false;
-    private FamilyCheckable checker = new FamilyCheckerUtils();
+
 
     private Graph() {
         familyTree = new LinkedList<>();
@@ -84,7 +80,7 @@ public class Graph {
             Map<IFamilyMember, IRelationship> fam_list = root.getRelatioshipList();
             if (fam_list != null || !fam_list.isEmpty()) {
                 for (Map.Entry<IFamilyMember, IRelationship> entry : fam_list.entrySet()) {
-                    if (entry.getKey().getMemberName().equals(existingFamilyPerson.getMemberName()) && checker.hasMarried(entry.getKey())) {
+                    if (entry.getKey().getMemberName().equals(existingFamilyPerson.getMemberName()) && this.hasMarried(entry.getKey())) {
                         entry.getKey().addRelationship(newFamilyPerson, relation);
                         CHILD_ADDITION_SUCCEEDED = true;
                         break;
@@ -115,6 +111,19 @@ public class Graph {
         }
 
         return object;
+    }
+
+
+    private Boolean hasMarried(IFamilyMember member) {
+        Boolean hasHusband = false;
+        Map<IFamilyMember, IRelationship> fam_list = member.getRelatioshipList();
+        for (Map.Entry<IFamilyMember, IRelationship> entry : fam_list.entrySet()) {
+            if (entry.getValue().getRelationType().equals(Constants.HUSBAND)) {
+                hasHusband = true;
+            }
+        }
+
+        return hasHusband;
     }
 
 }

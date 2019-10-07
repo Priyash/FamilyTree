@@ -1,5 +1,4 @@
 package com.geektrust.family.RelationshipInterface;
-import com.geektrust.family.GenderInterface.*;
 
 /**
  * IRelationship
@@ -7,5 +6,5 @@ import com.geektrust.family.GenderInterface.*;
 public interface IRelationship {
 
     String getRelationType();
-    IGender getGender();
+    String getGender();
 }

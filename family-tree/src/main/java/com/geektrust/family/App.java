@@ -26,11 +26,11 @@ public final class App {
         IBuildable internalBuilder = new InternalGraphBuilder();
         internalBuilder.build();
 
-        if(!filePath.isEmpty()){
+        if (!filePath.isEmpty()) {
             IBuildable externalBuilder = new ExternalGraphBuilder();
             externalBuilder.buildWithExternalFile(filePath);
             LinkedList<IFamilyMember> familyTree = Graph.getInstance().getLatestFamilyTree();
         }
-        
+
     }
 }
