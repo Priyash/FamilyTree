@@ -18,7 +18,7 @@ import com.geektrust.family.Utility.TxtFileDataReader;
  */
 public class InternalGraphBuilder implements IBuildable {
 
-    List<String> family_data_list = new ArrayList<>();
+    private List<String> family_data_list = new ArrayList<>();
 
     public InternalGraphBuilder (){
 
@@ -34,24 +34,25 @@ public class InternalGraphBuilder implements IBuildable {
     }
 
     @Override
-    public void buildWithExternalFile(String filePath) {
-        // TODO Auto-generated method stub
+    public void buildWithExternalFile(String filePath) {}
 
-    }
 
     public void buildFamilyTree(List<String> family_data_list) {
 
         family_data_list = this.createFamilyDataList();
         for (String family_data : family_data_list) {
             String[] command_list = family_data.split(" ");
-
-            if (command_list[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_ADD_CHILD])) {
-                this.addChild(command_list);
-            } else if (command_list[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_ADD_SPOUSE])) {
-                this.addSpouse(command_list);
-            }
+            this.addFamilyMember(command_list);
         }
 
+    }
+
+    private void addFamilyMember(String[] commandList){
+        if (commandList[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_ADD_CHILD])) {
+            this.addChild(commandList);
+        } else if (commandList[0].equals(Constants.COMMAND[Constants.COMMAND_TYPE_ADD_SPOUSE])) {
+            this.addSpouse(commandList);
+        }
     }
 
     
@@ -71,9 +72,9 @@ public class InternalGraphBuilder implements IBuildable {
         IFamilyMember existingFamilyMember = Graph.getInstance().createNewFamilyMember(personToSearch);
         IFamilyMember newFamilyMember = Graph.getInstance().createNewFamilyMember(personToAdd);
         if (personToAddGenderType.equals(Constants.MALE)) {
-            relation = new Son();
+            relation = new Relationship(Constants.SON, Constants.MALE);
         } else {
-            relation = new Daughter();
+            relation = new Relationship(Constants.DAUGHTER, Constants.FEMALE);
         }
 
         Graph.getInstance().update_family_tree(existingFamilyMember, newFamilyMember, relation);
@@ -96,9 +97,9 @@ public class InternalGraphBuilder implements IBuildable {
         IFamilyMember existingFamilyMember = Graph.getInstance().createNewFamilyMember(personToSearch);
         IFamilyMember newFamilyMember = Graph.getInstance().createNewFamilyMember(personToAdd);
         if (personToAddGenderType.equals(Constants.MALE)) {
-            relation = new Husband();
+            relation = new Relationship(Constants.HUSBAND, Constants.MALE);
         } else {
-            relation = new Wife();
+            relation = new Relationship(Constants.WIFE, Constants.FEMALE);
         }
 
         Graph.getInstance().update_family_tree(existingFamilyMember, newFamilyMember, relation);
@@ -114,4 +115,6 @@ public class InternalGraphBuilder implements IBuildable {
 
         return family_data_list;
     }
+
+    
 }

@@ -1,6 +1,8 @@
 
-
 package com.geektrust.family.Utility;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Constants
@@ -13,6 +15,8 @@ public class Constants {
     public static final String HUSBAND = "Husband";
     public static final String WIFE = "Wife";
     public static final String SIBLING = "Siblings";
+    public static final String MALE_SIBLING = "MaleSiblings";
+    public static final String FEMALE_SIBLING = "FemaleSiblings";
 
     public static final String FATHER = "Father";
     public static final String MOTHER = "Mother";
@@ -23,7 +27,17 @@ public class Constants {
     public static final String MALE_CHILD = "Male_Child";
     public static final String FEMALE_CHILD = "Female_Child";
 
-    public static final int GRAPH_SIZE = 25;
+    public static final String BROTHER_IN_LAW = "Brother-In-Law";
+    public static final String SISTER_IN_LAW = "Sister-In-Law";
+
+    public static final String MATERNAL_UNCLE = "Maternal-Uncle";
+    public static final String MATERNAL_AUNT = "Maternal-Aunt";
+
+    public static final String PATERNAL_UNCLE = "Paternal-lUncle";
+    public static final String PATERNAL_AUNT = "Paternal-Aunt";
+
+    public static final int BUILD_FILE_SIZE = 30;
+    public static final int BUILD_FAMILY_TREE_SIZE = 33;
     public static final int DATA_CLASS_TYPE_TXT = 0;
     public static final String[] DATA_CLASS = new String[]{"com.geektrust.family.Utility.TxtFileDataReader"};
     public static final String BUILD_TREE_FILE = "build.txt";
@@ -43,10 +57,15 @@ public class Constants {
     public static final int FETCH_RELATION_TYPE_FETCH_MATERNAL_UNCLE = 6;
     public static final int FETCH_RELATION_TYPE_FETCH_PATERNAL_UNCLE = 7;
     public static final int FETCH_RELATION_TYPE_FETCH_PATERNAL_AUNT = 8;
-    public static final String[] FETCH_RELATON_TYPE = new String[]{"com.geektrust.family.FetchSons", "com.geektrust.family.FetchDaughters", "com.geektrust.family.FetchBrotherInLaw", 
-                                                                "com.geektrust.family.FetchSisterInLaw", "com.geektrust.family.FetchSiblings",
-                                                                "com.geektrust.family.FetchMaternalAunt", "com.geektrust.family.FetchMaternalUncle",
-                                                                "com.geektrust.family.FetchPaternalUncle", "com.geektrust.family.FetchPaternalAunt"};
+    public static final String[] FETCH_RELATON_TYPE = new String[]{"com.geektrust.family.FetchSonsOrDaughters",
+                                                                "com.geektrust.family.FetchSonsOrDaughters", 
+                                                                "com.geektrust.family.FetchBrotherInLaw", 
+                                                                "com.geektrust.family.FetchSisterInLaw", 
+                                                                "com.geektrust.family.FetchSiblings",
+                                                                "com.geektrust.family.FetchMaternalUncleOrAunt",
+                                                                "com.geektrust.family.FetchMaternalUncleOrAunt", 
+                                                                "com.geektrust.family.FetchPaternalUncleOrAunt",
+                                                                "com.geektrust.family.FetchPaternalUncleOrAunt"};
 
 
     public static final String CHILD_ADDITION_FAILED = "CHILD_ADDITION_FAILED";
@@ -57,6 +76,11 @@ public class Constants {
     public static final String[] EXTERNAL_RELATION_TYPE = new String[]{"Son","Daughter","Brother-In-Law","Sister-In-Law",
                                                                         "Siblings","Maternal-Aunt", "Maternal-Uncle", 
                                                                         "Paternal-Uncle", "Paternal-Aunt"};
+
+    public static final String[] EXTERNAL_RELATION_GENDER_TYPE = new String[] {"Male", "Female", "Male", "Female", "Female", "Female",
+                                                                        "Male", "Male", "Female"};
+                                                                        
+
     Constants()
     {
         throw new RuntimeException("Constant class cannot be instantiated");

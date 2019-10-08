@@ -33,7 +33,13 @@ public class FamilyMember implements IFamilyMember{
 
     @Override
     public void setMemberName(String name) {
-        this.memberName = name;
+        if(!name.isEmpty()){
+            this.memberName = name;
+        }
+        else{
+            throw new RuntimeException("Member name should not be empty");
+        }
+        
     }
 
     @Override
